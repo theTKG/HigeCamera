@@ -224,20 +224,25 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 let adjustValue = ((face.leftEyePosition.y + face.rightEyePosition.y)/2 - face.mouthPosition.y)/6 // ヒゲを口の少し上にするための調整値
                 
                 // ヒゲ画像を傾ける
-//                let higeImg = UIImage(named:"hige.png")
+//                let higeImg = UIImage(named:"hige.png")                
                 print("faceAngle:\(face.faceAngle)")
                 let myRotateHige = UIImageView()
                 myRotateHige.image = UIImage(named:"hige.png")
                 let angle: CGFloat = CGFloat((face.faceAngle * Float(M_PI)) / 180.0)
+                let xt = (mouseRectY - higeHeight/2 - adjustValue) * sin(angle) + (face.mouthPosition.x - higeWidth/2) * cos(angle)
+                let yt = (mouseRectY - higeHeight/2 - adjustValue) * cos(angle) - (face.mouthPosition.x - higeWidth/2) * sin(angle)
+
                 print("angle : \(angle)")
                 myRotateHige.transform = CGAffineTransformMakeRotation(angle)
                 print(myRotateHige.transform)
                 
-                let higeRect  = CGRectMake(face.mouthPosition.x - higeWidth/2,mouseRectY - higeHeight/2 - adjustValue,higeWidth,higeHeight)
+                let higeRect = CGRectMake(xt, yt, higeWidth, higeHeight)
+//
+//                let higeRect  = CGRectMake(face.mouthPosition.x - higeWidth/2,mouseRectY - higeHeight/2 - adjustValue,higeWidth,higeHeight)
 
                 CGContextConcatCTM(drawCtxt, myRotateHige.transform)
                 CGContextDrawImage(drawCtxt,higeRect,myRotateHige.image!.CGImage)
-
+                
 
             }
             let drawedImage = UIGraphicsGetImageFromCurrentImageContext()
