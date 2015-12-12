@@ -18,7 +18,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var buttonAlbum : UIButton!
     
     var label : UILabel!
-    var mySwicth: UISwitch!
+    var faceLabel : UILabel!
+    var higeLabel : UILabel!
+    var myFaceSwicth: UISwitch!
+    var myHigeSwicth: UISwitch!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,21 +118,49 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         label.textAlignment = NSTextAlignment.Center
         // 配置する座標を設定する.
         label.layer.position = CGPoint(x: (self.view.bounds.width/10)*4,y: (self.view.bounds.height/10)*8)
-        // Viewの背景色を青にする.
-        self.view.backgroundColor = UIColor.cyanColor()
         // ViewにLabelを追加.
-        self.view.addSubview(label)
+//        self.view.addSubview(label)
         
         
-        // Swicthを作成する.
-        mySwicth = UISwitch()
-        mySwicth.layer.position = CGPoint(x: (self.view.bounds.width/10)*9,y: (self.view.bounds.height/10)*8)
+        // 顔判別描画 LabelとSwicthを作成する.
+        faceLabel = UILabel(frame: CGRectMake(0,0,80,40))
+        faceLabel.backgroundColor = UIColor.orangeColor()
+        faceLabel.layer.masksToBounds = true
+        faceLabel.layer.cornerRadius = 20.0
+        faceLabel.text = "顔判別"
+        faceLabel.textColor = UIColor.whiteColor()
+        faceLabel.textAlignment = NSTextAlignment.Center
+        faceLabel.layer.position = CGPoint(x: (self.view.bounds.width/10)*2,y: (self.view.bounds.height/10)*8)
+        self.view.addSubview(faceLabel)
+
+        myFaceSwicth = UISwitch()
+        myFaceSwicth.layer.position = CGPoint(x: (self.view.bounds.width/10)*4,y: (self.view.bounds.height/10)*8)
         // Swicthの枠線を表示する.
-        mySwicth.tintColor = UIColor.blackColor()
+        myFaceSwicth.tintColor = UIColor.blackColor()
         // SwitchをOnに設定する.
-        mySwicth.on = true
+        myFaceSwicth.on = true
         // SwitchをViewに追加する.
-        self.view.addSubview(mySwicth)
+        self.view.addSubview(myFaceSwicth)
+        
+        // ヒゲ描画 LabelとSwicthを作成する.
+        higeLabel = UILabel(frame: CGRectMake(0,0,80,40))
+        higeLabel.backgroundColor = UIColor.orangeColor()
+        higeLabel.layer.masksToBounds = true
+        higeLabel.layer.cornerRadius = 20.0
+        higeLabel.text = "ヒゲ"
+        higeLabel.textColor = UIColor.whiteColor()
+        higeLabel.textAlignment = NSTextAlignment.Center
+        higeLabel.layer.position = CGPoint(x: (self.view.bounds.width/10)*6,y: (self.view.bounds.height/10)*8)
+        self.view.addSubview(higeLabel)
+
+        myHigeSwicth = UISwitch()
+        myHigeSwicth.layer.position = CGPoint(x: (self.view.bounds.width/10)*8,y: (self.view.bounds.height/10)*8)
+        // Swicthの枠線を表示する.
+        myHigeSwicth.tintColor = UIColor.blackColor()
+        // SwitchをOnに設定する.
+        myHigeSwicth.on = true
+        // SwitchをViewに追加する.
+        self.view.addSubview(myHigeSwicth)
 
         
     }
@@ -179,9 +210,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 //face
                 let face = feature as! CIFaceFeature
                 var faceRect = face.bounds
-                faceRect.origin.y = pickedImage.size.height - faceRect.origin.y - faceRect.size.height
-                CGContextSetStrokeColorWithColor(drawCtxt, UIColor.redColor().CGColor)
-                if mySwicth.on {
+                if myFaceSwicth.on {
+                    faceRect.origin.y = pickedImage.size.height - faceRect.origin.y - faceRect.size.height
+                    CGContextSetStrokeColorWithColor(drawCtxt, UIColor.redColor().CGColor)
                     CGContextStrokeRect(drawCtxt,faceRect)
                 }
                 
@@ -189,8 +220,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 if((face.hasLeftEyePosition)){
                     let leftEyeRectY = pickedImage.size.height - face.leftEyePosition.y
                     let leftEyeRect  = CGRectMake(face.leftEyePosition.x - 5,leftEyeRectY - 5,10,10)
-                    CGContextSetStrokeColorWithColor(drawCtxt, UIColor.blueColor().CGColor)
-                    if mySwicth.on {
+                    if myFaceSwicth.on {
+                        CGContextSetStrokeColorWithColor(drawCtxt, UIColor.blueColor().CGColor)
                         CGContextStrokeRect(drawCtxt,leftEyeRect)
                         
                     }
@@ -200,8 +231,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 if((face.hasRightEyePosition)){
                     let rightEyeRectY = pickedImage.size.height - face.rightEyePosition.y
                     let rightEyeRect  = CGRectMake(face.rightEyePosition.x - 5,rightEyeRectY - 5,10,10)
-                    CGContextSetStrokeColorWithColor(drawCtxt, UIColor.blueColor().CGColor)
-                    if mySwicth.on {
+                    if myFaceSwicth.on {
+                        CGContextSetStrokeColorWithColor(drawCtxt, UIColor.blueColor().CGColor)
                         CGContextStrokeRect(drawCtxt,rightEyeRect)
                     }
                 }
@@ -210,8 +241,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 if(face.hasMouthPosition){
                     let mouseRectY = pickedImage.size.height - face.mouthPosition.y
                     let mouseRect  = CGRectMake(face.mouthPosition.x - 5,mouseRectY - 5,10,10)
-                    CGContextSetStrokeColorWithColor(drawCtxt,UIColor.blueColor().CGColor)
-                    if mySwicth.on {
+                    if myFaceSwicth.on {
+                        CGContextSetStrokeColorWithColor(drawCtxt,UIColor.blueColor().CGColor)
                         CGContextStrokeRect(drawCtxt,mouseRect)
                     }
                 }
@@ -225,23 +256,24 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 
                 // ヒゲ画像を傾ける
 //                let higeImg = UIImage(named:"hige.png")                
-                print("faceAngle:\(face.faceAngle)")
+//                print("faceAngle:\(face.faceAngle)")
                 let myRotateHige = UIImageView()
                 myRotateHige.image = UIImage(named:"hige.png")
                 let angle: CGFloat = CGFloat((face.faceAngle * Float(M_PI)) / 180.0)
                 let xt = (mouseRectY - higeHeight/2 - adjustValue) * sin(angle) + (face.mouthPosition.x - higeWidth/2) * cos(angle)
                 let yt = (mouseRectY - higeHeight/2 - adjustValue) * cos(angle) - (face.mouthPosition.x - higeWidth/2) * sin(angle)
 
-                print("angle : \(angle)")
+//                print("angle : \(angle)")
                 myRotateHige.transform = CGAffineTransformMakeRotation(angle)
                 print(myRotateHige.transform)
                 
                 let higeRect = CGRectMake(xt, yt, higeWidth, higeHeight)
-//
 //                let higeRect  = CGRectMake(face.mouthPosition.x - higeWidth/2,mouseRectY - higeHeight/2 - adjustValue,higeWidth,higeHeight)
 
-                CGContextConcatCTM(drawCtxt, myRotateHige.transform)
-                CGContextDrawImage(drawCtxt,higeRect,myRotateHige.image!.CGImage)
+                if myHigeSwicth.on {
+                    CGContextConcatCTM(drawCtxt, myRotateHige.transform)
+                    CGContextDrawImage(drawCtxt,higeRect,myRotateHige.image!.CGImage)
+                }
                 
 
             }
